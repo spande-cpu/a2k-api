@@ -101,8 +101,8 @@ scrape_a2k <- function(page_url="https://able2know.org/forum/philosophy/", n_pag
   
 }
 
-# Write Data
-data <- scrape_a2k(n_pages = 40)
+# Get Data: Uncomment to run.
+# data <- scrape_a2k(n_pages = 40)
 
 
   
