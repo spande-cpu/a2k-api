@@ -61,7 +61,7 @@ get_discussion <- function(thread_url)
 # Crawler
 scrape_a2k <- function(page_url="https://able2know.org/forum/philosophy/", n_pages = 20)
 {
-  seed_url <- url(page_url)
+  seed_url <- page_url
   seed_html <- read_html(seed_url)
   # Total No. of Pages in the Forum
   total_pages <- seed_html %>%
@@ -77,7 +77,7 @@ scrape_a2k <- function(page_url="https://able2know.org/forum/philosophy/", n_pag
     crawler_depth = 2:total_pages
   } else if(!is.numeric(n_pages) & n_pages != "all") {
     print(
-      "Error: Please supply the number of pages to scrape or \"all\" to scrape all pages in the forum (this may take some time)."
+      "Error: Please supply the number of pages to scrape or set n_pages = 'all' to scrape all pages in the forum (this may take some time)."
       )
   } else if(n_pages > total_pages | n_pages == 1 | n_pages == 0 | n_pages < 0) {
     crawler_depth = 1
@@ -85,14 +85,13 @@ scrape_a2k <- function(page_url="https://able2know.org/forum/philosophy/", n_pag
     crawler_depth = 2:n_pages
   }
   # Page urls to scrape content from
-  if (crawler_depth == 1 | !is.numeric(crawler_depth) | is.infinite(crawler_depth)) {
+  if (isTRUE(crawler_depth == 1) | !is.numeric(crawler_depth) | isTRUE(is.infinite(crawler_depth))) {
     page_urls <- c(seed_url)
   } else {
     page_urls <- c(
       seed_url,
       paste0(seed_url, "page-", crawler_depth)
     )[crawler_depth] %>% .[complete.cases(.)]
-
   }
   
   master <- purrr::map_dfr(page_urls, get_info)
@@ -102,6 +101,8 @@ scrape_a2k <- function(page_url="https://able2know.org/forum/philosophy/", n_pag
   
 }
 
+# Write Data
+data <- scrape_a2k(n_pages = 40)
 
 
   
