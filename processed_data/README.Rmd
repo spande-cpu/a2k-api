@@ -1,0 +1,39 @@
+---
+title: "Features and Descritive Statitics"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Dependencies
+library(tidyverse)
+library(tidytext)
+library(plotly)
+# GGtheme
+theme_d <- theme_dark() + 
+  theme(
+    plot.title = element_text(face = "bold"),
+    axis.text = element_text(face = "bold"),
+    axis.title = element_text(face = "bold")
+    ) 
+```
+
+## Note: `posts` containts a `list()` nested within the the `[Url, Titles]` indices.
+
+```{r}
+data <- read_rds("a2k_40_page_nested_extract.rds") %>%
+  mutate_at(vars(Score, Replies, Views), as.numeric) %>%
+  # Total No. of Posts in posts
+  mutate(PostCount = lengths(posts))
+```
+
+```{r}
+skimr::skim(data, .data_name = "A2K Philosophy Sub-Forum")
+```
+
+
+
+
+
+
+
