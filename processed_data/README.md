@@ -1,4 +1,4 @@
-Features and Descriptive Statitics
+Descriptive Stats.
 ================
 
 ## Note: `posts` containts a `list()` nested within the the `[Url, Titles]` indices.

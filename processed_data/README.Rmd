@@ -1,5 +1,5 @@
 ---
-title: "Features and Descritive Statitics"
+title: "Descriptive Stats."
 output: github_document
 ---
 
