@@ -3,10 +3,8 @@ Forum Scraper for able2know.org
 
 # Description
 
-This code is a scraper written in R Markdown for extracting information
-from the philosophy forum on the website
-[able2know.org](https://able2know.org). The output format is set to
-`github_document`.
+This code is a scraper written in R for extracting information from the
+the website [able2know.org](https://able2know.org).
 
 ## Required Libraries
 
@@ -97,4 +95,4 @@ the number of pages to scrape and the website’s responsiveness.
 
 That’s it! This code provides a framework for scraping information from
 the philosophy forum on able2know.org using R Markdown. Feel free to
-modify it according to your needs. \`\`\`
+modify it according to your needs.
