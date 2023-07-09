@@ -42,8 +42,7 @@ in R.
 ## Function: get_info
 
 ``` r
-get_info <- function(base_url)
-{
+get_info <- function(base_url) {
   # Code omitted for brevity
 }
 ```
@@ -54,8 +53,7 @@ for extracting topics, URLs, and metadata from the forum page.
 ## Function: get_discussion
 
 ``` r
-get_discussion <- function(thread_url)
-{
+get_discussion <- function(thread_url) {
   # Code omitted for brevity
 }
 ```
@@ -66,8 +64,7 @@ the message content and discussions from that particular thread.
 ## Function: scrape_a2k
 
 ``` r
-scrape_a2k <- function(page_url="https://able2know.org/forum/philosophy/", n_pages = 20)
-{
+scrape_a2k <- function(page_url = "https://able2know.org/forum/philosophy/", n_pages = 20) {
   # Code omitted for brevity
 }
 ```
