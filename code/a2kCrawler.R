@@ -21,7 +21,8 @@ get_info <- function(base_url) {
   Score <- base_html %>%
     html_nodes(".gridItem") %>%
     html_nodes(".postScore") %>%
-    html_text2()
+    html_text2() %>%
+    as.numeric()
   ## Get Meta-Data
   meta_data <- base_html %>%
     html_nodes(".gridItem") %>%
@@ -30,23 +31,21 @@ get_info <- function(base_url) {
     as_tibble() %>%
     separate(
       "value",
-      c("Topics", "OriginalPoster", "PostDate", "Replies", "Views", "LastReply"),
+      c("Topics", "Creator", "Created", "Replies", "Views", "LastReply"),
       sep = "\n"
     ) %>%
     mutate(
       Topics = str_remove(Topics, "Forums: "),
-      OriginalPoster = str_remove(OriginalPoster, "Question by |Discussion by "),
-      PostDate = lubridate::parse_date_time(str_remove(PostDate, "Posted "), "%m/%d/%y %I:%M %p"),
-      Replies = str_remove_all(str_remove(Replies, "Replies: "), ","),
-      Views = str_remove_all(str_remove(Views, "Views: "), ","),
-      LastReply = str_remove(LastReply, "Last Post by ")
-    ) %>%
-    separate("LastReply", c("LastReplyFrom", "LastReplyAt"), sep = "on ")
+      Creator = str_remove(Creator, "Question by |Discussion by "),
+      Created = lubridate::parse_date_time(str_remove(Created, "Posted "), "%m/%d/%y %I:%M %p"),
+      Replies = as.numeric(str_remove_all(str_remove(Replies, "Replies: "), ",")),
+      Views = as.numeric(str_remove_all(str_remove(Views, "Views: "), ","))
+    )
   
   cbind(Url, Titles, Score, meta_data)
 }
 
-# Get message content and discussions
+# Get comment-level data for each Title
 get_discussion <- function(thread_url) {
   thread_url %>%
     read_html() %>%
@@ -55,16 +54,12 @@ get_discussion <- function(thread_url) {
     str_squish() %>%
     str_replace_all("\"", "\'")
 }
-
-# Get posstername
 get_users <- function(thread_url) {
   thread_url %>%
     read_html() %>%
     html_nodes(".user") %>%
     html_text2()
 }
-
-# Get dates
 get_dates <- function(thread_url) {
   thread_url %>%
     read_html() %>%
@@ -112,8 +107,8 @@ scrape_a2k <- function(page_url = "https://able2know.org/forum/philosophy/", n_p
   
   master %>%
     mutate(comments = Url %>% purrr::map(get_discussion),
-           commentBy = Url %>% purrr::map(get_users),
-           commentAt = Url %>% purrr::map(get_dates))
+           commentedBy = Url %>% purrr::map(get_users),
+           commentedAt = Url %>% purrr::map(get_dates))
 }
 
 # Get Data: Uncomment to run.
