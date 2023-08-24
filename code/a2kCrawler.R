@@ -12,12 +12,12 @@ get_info <- function(base_url) {
     html_nodes(".title") %>%
     html_node("a") %>%
     html_attr("href")
-
+  
   Titles <- base_html %>%
     html_nodes(".gridItem") %>%
     html_nodes(".title") %>%
     html_text2()
-
+  
   Score <- base_html %>%
     html_nodes(".gridItem") %>%
     html_nodes(".postScore") %>%
@@ -36,13 +36,13 @@ get_info <- function(base_url) {
     mutate(
       Topics = str_remove(Topics, "Forums: "),
       OriginalPoster = str_remove(OriginalPoster, "Question by |Discussion by "),
-      PostDate = str_remove(PostDate, "Posted "),
+      PostDate = lubridate::parse_date_time(str_remove(PostDate, "Posted "), "%m/%d/%y %I:%M %p"),
       Replies = str_remove_all(str_remove(Replies, "Replies: "), ","),
       Views = str_remove_all(str_remove(Views, "Views: "), ","),
       LastReply = str_remove(LastReply, "Last Post by ")
     ) %>%
     separate("LastReply", c("LastReplyFrom", "LastReplyAt"), sep = "on ")
-
+  
   cbind(Url, Titles, Score, meta_data)
 }
 
@@ -51,9 +51,26 @@ get_discussion <- function(thread_url) {
   thread_url %>%
     read_html() %>%
     html_nodes(".expandedPostBody") %>%
-    html_text() %>%
+    html_text2() %>%
     str_squish() %>%
     str_replace_all("\"", "\'")
+}
+
+# Get posstername
+get_users <- function(thread_url) {
+  thread_url %>%
+    read_html() %>%
+    html_nodes(".user") %>%
+    html_text2()
+}
+
+# Get dates
+get_dates <- function(thread_url) {
+  thread_url %>%
+    read_html() %>%
+    html_nodes(".date.smalltxt") %>%
+    html_text2() %>%
+    lubridate::parse_date_time(., "%a %d %b, %Y %I:%M %p")
 }
 
 # Crawler
@@ -90,12 +107,15 @@ scrape_a2k <- function(page_url = "https://able2know.org/forum/philosophy/", n_p
       paste0(seed_url, "page-", crawler_depth)
     )[crawler_depth] %>% .[complete.cases(.)]
   }
-
+  
   master <- purrr::map_dfr(page_urls, get_info)
-
+  
   master %>%
-    mutate(posts = Url %>% purrr::map(get_discussion))
+    mutate(comments = Url %>% purrr::map(get_discussion),
+           commentBy = Url %>% purrr::map(get_users),
+           commentAt = Url %>% purrr::map(get_dates))
 }
 
 # Get Data: Uncomment to run.
 # data <- scrape_a2k(n_pages = 40)
+
