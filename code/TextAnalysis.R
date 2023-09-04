@@ -1,9 +1,21 @@
 # Data
 data <- read_rds("./processed_data/a2k_40_page_nested_extract.rds")
 
+# Extract Topics
+glimpse(data)
+data %>%
+  mutate(Subject = sub("\\,.*", "", Topics)) %>%
+  count(Subject) %>% as_tibble() %>%
+  arrange(desc(n)) %>%
+  print(n = "all")
 
-
-## Some
+## Science and Religion
+data <- data %>%
+  mutate(Subject = sub("\\,.*", "", Topics)) %>%
+  filter(Subject %in% c("Science", "Religion")) %>%
+  mutate(Score = as.numeric(Score), 
+         Replies = as.numeric(Replies), 
+         Views = as.numeric(Views))
 
 
 # Top Topics
