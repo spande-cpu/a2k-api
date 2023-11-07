@@ -3,8 +3,7 @@ Forum Scraper for able2know.org
 
 # Description
 
-This code is a scraper written in R for extracting information from the
-the website [able2know.org](https://able2know.org).
+A simple web-crawler to get forum and post information from [able2know.org](https://able2know.org).
 
 ## Required Libraries
 
@@ -34,11 +33,6 @@ library(rvest)
     ## 
     ##     guess_encoding
 
-The code begins by loading the necessary libraries, namely `tidyverse`
-and `rvest`. The `tidyverse` library provides a set of packages for data
-manipulation and visualization, while `rvest` is used for web scraping
-in R.
-
 ## Function: get_info
 
 ``` r
@@ -47,8 +41,8 @@ get_info <- function(base_url) {
 }
 ```
 
-This function, `get_info`, takes a base URL as input and is responsible
-for extracting topics, URLs, and metadata from the forum page.
+`get_info`: Takes a base URL as input and is responsible
+for extracting topics, URLs and metadata from the forum page.
 
 ## Function: get_discussion
 
@@ -58,7 +52,7 @@ get_discussion <- function(thread_url) {
 }
 ```
 
-The `get_discussion` function takes a thread URL as input and extracts
+`get_discussion`: Takes a thread URL as input and extracts
 the message content and discussions from that particular thread.
 
 ## Function: scrape_a2k
@@ -69,27 +63,20 @@ scrape_a2k <- function(page_url = "https://able2know.org/forum/philosophy/", n_p
 }
 ```
 
-The `scrape_a2k` function is the main crawler function. It takes a page
+`scrape_a2k`: Main crawling function. It takes a page
 URL (defaulting to the philosophy forum on able2know.org) and the number
 of pages to scrape as input. It then performs the web scraping process
 by calling the `get_info` and `get_discussion` functions.
 
 ## Execute the Scraper
 
-To run the web scraping process and retrieve the data, uncomment the
-following code:
-
 ``` r
 data <- scrape_a2k(n_pages = 40)
 ```
 
-By uncommenting this line, you can run the `scrape_a2k` function and
-specify the number of pages to scrape (in this case, 40). The extracted
-data will be stored in the `data` variable.
+The extracted data will be stored in the `data` object.
 
-Please note that running the scraper may take some time, depending on
-the number of pages to scrape and the website’s responsiveness.
+Running the scraper may take some time, depending on
+the number of pages to scrape, the website’s responsiveness and your internet connection.
 
-That’s it! This code provides a framework for scraping information from
-the philosophy forum on able2know.org using R Markdown. Feel free to
-modify it according to your needs.
+
